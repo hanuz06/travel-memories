@@ -1,8 +1,8 @@
 import UserItem from "./UserItem";
 import "./UsersList.css";
 
-const UsersList = ({ items }) => {
-  if (items.length === 0) {
+const UsersList = ({ users }) => {
+  if (!users?.length) {
     return (
       <div className='center'>
         <h2>No users found!</h2>
@@ -10,9 +10,16 @@ const UsersList = ({ items }) => {
     );
   }
   return (
-    <ul>
-      {items?.map((user) => {
-        return <UserItem key={user.id} id={user.id} image={user.image} />;
+    <ul className="users-list">
+      {users?.map((user) => {
+        return (
+          <UserItem
+            key={user.id}
+            id={user.id}
+            image={user.image}
+            locationCount={user.locations}
+          />
+        );
       })}
     </ul>
   );
