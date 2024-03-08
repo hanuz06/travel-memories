@@ -1,7 +1,9 @@
+import Button from "../../shared/components/FormElements/Button";
 import Card from "../../shared/components/UIElements/Card";
+
 import "./LocationItem.css";
 
-function LocationItem({ image, title, address, description }) {
+function LocationItem({ id, image, title, address, description }) {
   return (
     <li className="place-item">
       <Card className="place-item__content">
@@ -14,9 +16,9 @@ function LocationItem({ image, title, address, description }) {
           <p>{description}</p>
         </div>
         <div className="place-item__actions">
-          <button type="button">VIEW ON MAP</button>
-          <button type="button">EDIT</button>
-          <button type="button">DELETE</button>
+          <Button inverse>VIEW ON MAP</Button>
+          <Button to={`/locations/${id}`}>EDIT</Button>
+          <Button danger>DELETE</Button>
         </div>
       </Card>
     </li>
