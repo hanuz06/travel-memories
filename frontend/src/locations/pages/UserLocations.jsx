@@ -1,8 +1,8 @@
-import LocationList from "../components/LocationList";
 import { faker } from "@faker-js/faker";
 import { v4 as uuidv4 } from "uuid";
+import LocationList from "../components/LocationList";
 
-const UserLocations = () => {
+function UserLocations() {
   const DUMMY_LOCATIONS = [];
 
   for (let index = 0; index < 5; index++) {
@@ -23,12 +23,12 @@ const UserLocations = () => {
         lat: faker.location.latitude({ max: 10, min: -10 }),
         lng: faker.location.longitude({ max: 10, min: -10 }),
       },
-      creator: "u" + (index + 1),
+      creator: `u${index + 1}`,
     });
   }
 
   console.log(DUMMY_LOCATIONS);
   return <LocationList items={DUMMY_LOCATIONS} />;
-};
+}
 
 export default UserLocations;

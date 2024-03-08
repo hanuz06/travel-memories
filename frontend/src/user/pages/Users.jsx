@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import UsersList from "../components/UsersList";
 
-const Users = () => {
+function Users() {
   const USERS = [];
 
   for (let index = 0; index < 5; index++) {
@@ -19,6 +19,6 @@ const Users = () => {
   }
   console.log(USERS);
   return <UsersList users={USERS} />;
-};
+}
 
 export default Users;

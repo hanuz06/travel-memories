@@ -5,7 +5,7 @@ import "./UserItem.css";
 import Avatar from "../../shared/components/UIElements/Avatar";
 import Card from "../../shared/components/UIElements/Card";
 
-const UserItem = ({ image, name, locationCount, id }) => {
+function UserItem({ image, name, locationCount, id }) {
   return (
     <li className="user-item">
       <Card className="user-item__content">
@@ -16,13 +16,14 @@ const UserItem = ({ image, name, locationCount, id }) => {
           <div className="user-item__info">
             <h2>{name}</h2>
             <h3>
-              {locationCount} {locationCount === 1 ? "Place" : "Places"}
+              {locationCount}
+              {locationCount === 1 ? "Place" : "Places"}
             </h3>
           </div>
         </Link>
       </Card>
     </li>
   );
-};
+}
 
 export default UserItem;
