@@ -17,7 +17,7 @@ const Users = () => {
       locations: faker.number.int({ min: 1, max: 5 }),
     });
   }
-  console.log(USERS)
+  console.log(USERS);
   return <UsersList users={USERS} />;
 };
 
