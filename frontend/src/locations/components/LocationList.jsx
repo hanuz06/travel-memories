@@ -14,7 +14,7 @@ function LocationList({ items }) {
       </div>
     );
   }
-
+  console.log("LocationList=", items);
   return (
     <ul className="place-list">
       {items.map((location) => (

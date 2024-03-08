@@ -8,7 +8,7 @@ function Users() {
 
   for (let index = 0; index < 5; index++) {
     USERS.push({
-      id: uuidv4(),
+      id: `u${index + 1}`,
       name: faker.person.fullName(),
       image: faker.image.url({
         width: 50,
