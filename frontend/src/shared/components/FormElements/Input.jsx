@@ -33,6 +33,7 @@ const Input = ({
   placeholder,
   rows,
   errorText,
+  label,
 }) => {
   const [inputState, dispatch] = useReducer(inputReducer, {
     value: initialValue || "",
@@ -46,11 +47,11 @@ const Input = ({
     onInput(id, value, isValid);
   }, [id, value, isValid, onInput]);
 
-  const changeHandler = (event) => {
+  const changeHandler = (e) => {
     dispatch({
       type: "CHANGE",
-      val: event.target.value,
-      validators: validators,
+      val: e.target.value,
+      validators,
     });
   };
 
@@ -60,7 +61,7 @@ const Input = ({
     });
   };
 
-  const element =
+  const currentElement =
     element === "input" ? (
       <input
         id={id}
@@ -77,7 +78,7 @@ const Input = ({
   return (
     <div className={`form-control ${!inputState.isValid && inputState.isTouched && "form-control--invalid"}`}>
       <label htmlFor={id}>{label}</label>
-      {element}
+      {currentElement}
       {!inputState.isValid && inputState.isTouched && <p>{errorText}</p>}
     </div>
   );

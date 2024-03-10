@@ -4,8 +4,9 @@ import Card from "../../shared/components/UIElements/Card";
 import Modal from "../../shared/components/UIElements/Modal";
 
 import "./LocationItem.css";
+import Map from "../../shared/components/UIElements/Map";
 
-function LocationItem({ id, image, title, address, description, creatorId }) {
+function LocationItem({ id, image, title, address, description, creatorId, coordinates }) {
   const [showMap, setShowMap] = useState(false);
 
   const openMapHandler = () => {
@@ -27,7 +28,7 @@ function LocationItem({ id, image, title, address, description, creatorId }) {
         footer={<Button onClick={closeMapHandler}>CLOSE</Button>}
       >
         <div className="map-container">
-          <h2>THE MAP!</h2>
+          <Map center={coordinates} zoom={16} />
         </div>
       </Modal>
       <li className="place-item">

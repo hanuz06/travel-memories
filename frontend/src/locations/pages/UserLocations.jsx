@@ -19,10 +19,14 @@ for (let index = 0; index < 5; index++) {
       height: 150,
     }),
     address: faker.location.streetAddress(false),
-    locations: {
-      lat: faker.location.latitude({ max: 10, min: -10 }),
-      lng: faker.location.longitude({ max: 10, min: -10 }),
+    coordinates: {
+      lat: 40.694217019239424,
+      lng: -73.96678137675303,
     },
+    // locations: {
+    //   lat: faker.location.latitude({ max: 10, min: -10 }),
+    //   lng: faker.location.longitude({ max: 10, min: -10 }),
+    // },
     creator: `u${index + 1}`,
   });
 }
