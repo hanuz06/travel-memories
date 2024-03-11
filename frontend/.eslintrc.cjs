@@ -14,7 +14,10 @@ module.exports = {
   plugins: ["react-refresh", "prettier"],
   rules: {
     "react/jsx-props-no-spreading": "off",
+    "jsx-a11y/control-has-associated-label": "off",
     "no-unneeded-ternary": "off",
+    "import/prefer-default-export": "off",
+    "no-continue": "off",
     "arrow-body-style": "off",
     "prefer-destructuring": ["off"],
     "padded-blocks": ["off"],
@@ -34,7 +37,6 @@ module.exports = {
     "jsx-a11y/no-noninteractive-element-interactions": "off",
     "jsx-a11y/click-events-have-key-events": "off",
     "react/react-in-jsx-scope": "off",
-    "jsx-a11y/control-has-associated-label": "warn",
     "no-trailing-spaces": "warn",
     "react/no-unknown-property": "warn",
     "react/jsx-filename-extension": "warn",

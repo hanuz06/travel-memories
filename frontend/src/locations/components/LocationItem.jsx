@@ -45,7 +45,7 @@ function LocationItem({ id, image, title, address, description, creatorId, coord
             <Button inverse onClick={openMapHandler}>
               VIEW ON MAP
             </Button>
-            <Button to={`/locations/${creatorId}`}>EDIT</Button>
+            <Button to={`/locations/${id}`}>EDIT</Button>
             <Button danger>DELETE</Button>
           </div>
         </Card>

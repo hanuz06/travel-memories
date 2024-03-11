@@ -74,7 +74,6 @@ const Input = ({
     ) : (
       <textarea id={id} rows={rows || 3} onChange={changeHandler} onBlur={touchHandler} value={inputState.value} />
     );
-
   return (
     <div className={`form-control ${!inputState.isValid && inputState.isTouched && "form-control--invalid"}`}>
       <label htmlFor={id}>{label}</label>

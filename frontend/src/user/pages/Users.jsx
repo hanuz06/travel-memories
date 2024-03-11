@@ -6,7 +6,7 @@ import UsersList from "../components/UsersList";
 function Users() {
   const USERS = [];
 
-  for (let index = 0; index < 5; index++) {
+  for (let index = 0; index < 2; index++) {
     USERS.push({
       id: `u${index + 1}`,
       name: faker.person.fullName(),

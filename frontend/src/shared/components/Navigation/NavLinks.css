@@ -21,10 +21,14 @@
   padding: 0.5rem;
 }
 
-.nav-links a:hover,
-.nav-links a:active,
+.nav-links a:hover {
+  background: #7c721f;
+  border-color: #292929;
+  color: #292929;
+}
+
 .nav-links a.active {
-  background: #f8df00;
+  background: #d1bf1e;
   border-color: #292929;
   color: #292929;
 }
@@ -70,7 +74,7 @@
 
   .nav-links button:hover,
   .nav-links button:active {
-    background: #f8df00;
+    background: #787345;
     color: #292929;
   }
 }

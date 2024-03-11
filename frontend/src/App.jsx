@@ -5,6 +5,7 @@ import Users from "./user/pages/Users";
 import NewLocation from "./locations/pages/NewLocation";
 import MainNavigation from "./shared/components/Navigation/MainNavigation";
 import UserLocations from "./locations/pages/UserLocations";
+import UpdateLocation from "./locations/pages/UpdateLocation";
 
 function App() {
   return (
@@ -20,6 +21,9 @@ function App() {
           </Route>
           <Route path="/locations/new" exact>
             <NewLocation />
+          </Route>
+          <Route path="/locations/:locationId">
+            <UpdateLocation />
           </Route>
           <Redirect to="/" />
         </Switch>
