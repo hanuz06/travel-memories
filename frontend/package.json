@@ -10,7 +10,8 @@
     "lint:fix": "eslint ./src/** --fix",
     "preview": "vite preview",
     "format": "prettier --write .",
-    "prepare": "cd .. && husky frontend/.husky"
+    "prepare": "cd .. && husky frontend/.husky",
+    "lint-front": "lint-staged"
   },
   "dependencies": {
     "@faker-js/faker": "^8.4.1",
