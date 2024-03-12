@@ -17,7 +17,7 @@ const Map = ({ className, style, center, zoom }) => {
     return <div>Error loading maps</div>;
   }
 
-  if (!isLoaded) { 
+  if (!isLoaded) {
     return <div>Loading maps</div>;
   }
 

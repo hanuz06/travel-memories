@@ -16,6 +16,7 @@ module.exports = {
     "react/jsx-props-no-spreading": "off",
     "jsx-a11y/control-has-associated-label": "off",
     "react/jsx-no-constructed-context-values": "off",
+    "react/button-has-type ": "off",
     "no-unneeded-ternary": "off",
     "import/prefer-default-export": "off",
     "react/jsx-wrap-multilines": "off",

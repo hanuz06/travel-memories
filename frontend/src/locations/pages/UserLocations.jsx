@@ -5,9 +5,8 @@ import LocationList from "../components/LocationList";
 import DUMMY_LOCATIONS from "../../shared/util/dummyLocations";
 
 function UserLocations() {
-
   const userId = useParams().userId;
-console.log(userId)
+  console.log(userId);
   const loadedLocations = DUMMY_LOCATIONS.filter((location) => location.creator === userId);
 
   return <LocationList items={loadedLocations} />;
