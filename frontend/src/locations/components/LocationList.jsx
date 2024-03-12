@@ -2,6 +2,7 @@ import "./LocationList.css";
 
 import Card from "../../shared/components/UIElements/Card";
 import LocationItem from "./LocationItem";
+import Button from "../../shared/components/FormElements/Button";
 
 function LocationList({ items }) {
   if (!items?.length) {
@@ -9,12 +10,11 @@ function LocationList({ items }) {
       <div className="place-list center">
         <Card>
           <h2>No locations found. Create a new one.</h2>
-          <button type="button">Share Location</button>
+          <Button to="/locations/new">Share Location</Button>
         </Card>
       </div>
     );
   }
-  console.log("LocationList=", items);
   return (
     <ul className="place-list">
       {items.map((location) => (

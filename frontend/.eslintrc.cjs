@@ -15,9 +15,12 @@ module.exports = {
   rules: {
     "react/jsx-props-no-spreading": "off",
     "jsx-a11y/control-has-associated-label": "off",
+    "react/jsx-no-constructed-context-values": "off",
     "no-unneeded-ternary": "off",
     "import/prefer-default-export": "off",
+    "react/jsx-wrap-multilines": "off",
     "no-continue": "off",
+    "react/jsx-one-expression-per-line": "off",
     "arrow-body-style": "off",
     "prefer-destructuring": ["off"],
     "padded-blocks": ["off"],
