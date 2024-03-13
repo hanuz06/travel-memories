@@ -1,4 +1,5 @@
 const express = require("express");
+const HttpError = require("../models/http-error");
 
 const router = express.Router();
 
@@ -36,6 +37,14 @@ router.get("/:pid", (req, res, next) => {
 
   const location = DUMMY_LOCATIONS.find((p) => p.id === locationId);
 
+  if (!location) {
+    throw new HttpError("Could not find a location for the id", 404);
+
+    // return res
+    //   .status(404)
+    //   .json({ message: "Location not found for the provided id." });
+  }
+
   res.json({ location });
 });
 
@@ -43,6 +52,15 @@ router.get("/user/:uid", (req, res, next) => {
   const userId = req.params.uid;
 
   const location = DUMMY_LOCATIONS.find((p) => p.creator === userId);
+
+  if (!location) {
+    return next(
+      new HttpError("Could not find a location for the user id", 404)
+    );
+    // return res
+    //   .status(404)
+    //   .json({ message: "Location not found for the provided user id." });
+  }
 
   res.json({ location });
 });
