@@ -7,7 +7,7 @@ async function getCoordsForAddress(address) {
       process.env.MAP_API
     }`
   );
-
+console.log(response?.data);
   const data = response.data;
 
   if (!data || data.status === "ZERO_RESULTS") {

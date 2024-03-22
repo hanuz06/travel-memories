@@ -1,7 +1,9 @@
-const HttpError = require("../models/http-error");
 const { v4: uuidv4 } = require("uuid");
 const { validationResult } = require("express-validator");
+
+const HttpError = require("../models/http-error");
 const getCoordsForAddress = require("../util/location");
+const Location = require("../models/location");
 
 let DUMMY_LOCATIONS = [
   {
@@ -32,28 +34,42 @@ let DUMMY_LOCATIONS = [
   },
 ];
 
-const getLocationById = (req, res, next) => {
+const getLocationById = async (req, res, next) => {
   const locationId = req.params.pid;
 
-  const location = DUMMY_LOCATIONS.find((p) => p.id === locationId);
-
-  if (!location) {
-    throw new HttpError("Could not find a location for the id", 404);
+  let location;
+  try {
+    location = await Location.findById(locationId);
+  } catch (err) {
+    return next(new HttpError("Failed to find location", 500));
   }
 
-  res.json({ location });
+  if (!location) {
+    return next(new HttpError("Could not find a location for the id", 404));
+  }
+
+  res.json({ location: location.toObject({ getters: true }) });
 };
 
-const getLocationsByUserId = (req, res, next) => {
+const getLocationsByUserId = async (req, res, next) => {
   const userId = req.params.uid;
 
-  const locations = DUMMY_LOCATIONS.filter((p) => p.creator === userId);
+  let locations;
+  try {
+    locations = await Location.find({ creator: userId });
+  } catch (err) {
+    return next(new HttpError("Failed to find locations", 500));
+  }
 
   if (!locations?.length) {
     return next(new HttpError("Could not find locations for the user id", 404));
   }
 
-  res.json({ locations });
+  res.json({
+    locations: locations.map((location) =>
+      location.toObject({ getters: true })
+    ),
+  });
 };
 
 const createLocation = async (req, res, next) => {
@@ -69,26 +85,38 @@ const createLocation = async (req, res, next) => {
   let coordinates;
 
   try {
-    coordinates = await getCoordsForAddress(address);
   } catch (error) {
     return next(error);
   }
-console.log(coordinates)
-  const createdLocation = {
-    id: uuidv4(),
+
+  console.log(coordinates);
+  const createdLocation = new Location({
     title,
     description,
-    location: coordinates,
     address,
+    location: {
+      lat: 40.74857864692124,
+      lng: -73.9852674364135,
+    },
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Empire_State_Building_%28aerial_view%29.jpg/375px-Empire_State_Building_%28aerial_view%29.jpg",
     creator,
-  };
+  });
 
-  DUMMY_LOCATIONS.push(createdLocation);
+  // DUMMY_LOCATIONS.push(createdLocation);
+  try {
+    await createdLocation.save();
+  } catch (err) {
+    const error = new HttpError(
+      "Creating a new location failed, please try again.",
+      500
+    );
+  }
 
   res.status(201).json(createdLocation);
 };
 
-const updateLocation = (req, res, next) => {
+const updateLocation = async (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
@@ -99,28 +127,42 @@ const updateLocation = (req, res, next) => {
   const locationId = req.params.pid;
   const { title, description } = req.body;
 
-  const updatedLocation = {
-    ...DUMMY_LOCATIONS.find((p) => p.id === locationId),
-  };
-  const locationIndex = DUMMY_LOCATIONS.findIndex((p) => p.id === locationId);
-  updatedLocation.title = title;
-  updatedLocation.description = description;
+  let location;
+  try {
+    location = await Location.findById(locationId);
+  } catch (err) {
+    return next(new HttpError("Failed to find location", 500));
+  }
 
-  DUMMY_LOCATIONS[locationIndex] = updatedLocation;
+  location.title = title;
+  location.description = description;
+
+  try {
+    await location.save();
+  } catch (err) {
+    return next(new HttpError("Failed to update location", 500));
+  }
 
   res.status(200).json({
-    location: updatedLocation,
+    location: location.toObject({ getters: true }),
   });
 };
 
-const deleteLocation = (req, res, next) => {
+const deleteLocation = async (req, res, next) => {
   const locationId = req.params.pid;
 
-  if (!DUMMY_LOCATIONS.find((p) => p.id === locationId)) {
-    throw new HttpError("Location not found for deletion", 404);
+  let location;
+  try {
+    location = await Location.findById(locationId);
+  } catch (err) {
+    return next(new HttpError("Failed to find location", 500));
   }
 
-  DUMMY_LOCATIONS = DUMMY_LOCATIONS.filter((p) => p.id !== locationId);
+  try {
+    await location.deleteOne();
+  } catch (err) {
+    return next(new HttpError("Failed to delete location", 500));
+  } 
 
   res.status(200).json({
     message: "Location deleted.",
