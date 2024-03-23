@@ -18,8 +18,4 @@ router.post(
 
 router.post("/login", login);
 
-// router.patch("/:pid", );
-
-// router.delete("/:pid", );
-
 module.exports = router;

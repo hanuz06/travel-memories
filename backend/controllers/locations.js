@@ -1,38 +1,9 @@
-const { v4: uuidv4 } = require("uuid");
 const { validationResult } = require("express-validator");
+const mongoose = require("mongoose");
 
 const HttpError = require("../models/http-error");
-const getCoordsForAddress = require("../util/location");
 const Location = require("../models/location");
-
-let DUMMY_LOCATIONS = [
-  {
-    id: "p1",
-    title: "Empire State Building",
-    description: "One of the most famous sky scrapers in the world!",
-    imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/NYC_Empire_State_Building.jpg/640px-NYC_Empire_State_Building.jpg",
-    address: "20 W 34th St, New York, NY 10001",
-    location: {
-      lat: 40.7484405,
-      lng: -73.9878584,
-    },
-    creator: "u1",
-  },
-  {
-    id: "p2",
-    title: "Emp. State Building",
-    description: "One of the most famous sky scrapers in the world!",
-    imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/NYC_Empire_State_Building.jpg/640px-NYC_Empire_State_Building.jpg",
-    address: "20 W 34th St, New York, NY 10001",
-    location: {
-      lat: 40.7484405,
-      lng: -73.9878584,
-    },
-    creator: "u2",
-  },
-];
+const User = require("../models/user");
 
 const getLocationById = async (req, res, next) => {
   const locationId = req.params.pid;
@@ -54,19 +25,19 @@ const getLocationById = async (req, res, next) => {
 const getLocationsByUserId = async (req, res, next) => {
   const userId = req.params.uid;
 
-  let locations;
+  let userWithLocations;
   try {
-    locations = await Location.find({ creator: userId });
+    userWithLocations = await User.findById(userId).populate("locations");
   } catch (err) {
     return next(new HttpError("Failed to find locations", 500));
   }
 
-  if (!locations?.length) {
+  if (!userWithLocations || !userWithLocations?.locations?.length) {
     return next(new HttpError("Could not find locations for the user id", 404));
   }
 
   res.json({
-    locations: locations.map((location) =>
+    locations: userWithLocations?.locations?.map((location) =>
       location.toObject({ getters: true })
     ),
   });
@@ -89,7 +60,6 @@ const createLocation = async (req, res, next) => {
     return next(error);
   }
 
-  console.log(coordinates);
   const createdLocation = new Location({
     title,
     description,
@@ -103,13 +73,30 @@ const createLocation = async (req, res, next) => {
     creator,
   });
 
-  // DUMMY_LOCATIONS.push(createdLocation);
+  let user;
+
   try {
-    await createdLocation.save();
+    user = await User.findById(creator);
   } catch (err) {
-    const error = new HttpError(
-      "Creating a new location failed, please try again.",
-      500
+    return next(new HttpError("Failed to find user: " + err.message, 404));
+  }
+
+  if (!user) {
+    return next(new HttpError("Failed to find user by provided id.", 500));
+  }
+
+  console.log(user);
+
+  try {
+    const currentSession = await mongoose.startSession();
+    currentSession.startTransaction();
+    await createdLocation.save({ session: currentSession });
+    user.locations.push(createdLocation);
+    await user.save({ session: currentSession });
+    await currentSession.commitTransaction();
+  } catch (err) {
+    return next(
+      new HttpError("Creating a new location failed: " + err.message, 500)
     );
   }
 
@@ -120,8 +107,7 @@ const updateLocation = async (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    console.log(errors);
-    throw new HttpError("Invalid inputs", 422);
+    return next(new HttpError("Invalid inputs", 422));
   }
 
   const locationId = req.params.pid;
@@ -153,22 +139,31 @@ const deleteLocation = async (req, res, next) => {
 
   let location;
   try {
-    location = await Location.findById(locationId);
+    location = await Location.findById(locationId).populate("creator");
   } catch (err) {
     return next(new HttpError("Failed to find location", 500));
   }
 
+  if (!location) {
+    return next(new HttpError("Failed to find location by provided id.", 404));
+  }
+
   try {
-    await location.deleteOne();
+    const currentSession = await mongoose.startSession();
+    currentSession.startTransaction();
+    await location.deleteOne({ session: currentSession });
+    location.creator.locations.pull(location);
+    await location.creator.save({ session: currentSession });
+    await currentSession.commitTransaction();
   } catch (err) {
     return next(new HttpError("Failed to delete location", 500));
-  } 
+  }
 
   res.status(200).json({
     message: "Location deleted.",
   });
 };
-
+ 
 module.exports = {
   getLocationById,
   getLocationsByUserId,
