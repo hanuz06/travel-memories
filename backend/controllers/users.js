@@ -43,12 +43,13 @@ const signup = async (req, res, next) => {
   });
 
   try {
-    await createdUser.save();
+    let res = await createdUser.save();
   } catch (err) {
     return next(new HttpError("Failed to sign up!", 500));
   }
 
-  res.status(201).json({ user: createdUser.toObject({ getters: true }) });
+  console.log("222222222222222222222= ", createdUser);
+  // res.status(201).json({ user: createdUser.toObject({ getters: true }) });
 };
 
 const login = async (req, res, next) => {

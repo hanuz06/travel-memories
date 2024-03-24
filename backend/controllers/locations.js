@@ -134,7 +134,7 @@ const updateLocation = async (req, res, next) => {
   });
 };
 
-const deleteLocation = async (req, res, next) => {
+const deleteLocation = async (req, res, next) => { 
   const locationId = req.params.pid;
 
   let location;

@@ -17,6 +17,7 @@ module.exports = {
     "jsx-a11y/control-has-associated-label": "off",
     "react/jsx-no-constructed-context-values": "off",
     "react/button-has-type": "off",
+    "no-empty": "warn",
     "no-unneeded-ternary": "off",
     "import/prefer-default-export": "off",
     "react/jsx-wrap-multilines": "off",
