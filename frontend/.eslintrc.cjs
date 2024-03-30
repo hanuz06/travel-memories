@@ -22,6 +22,7 @@ module.exports = {
     "no-unneeded-ternary": "off",
     "import/prefer-default-export": "off",
     "react/jsx-wrap-multilines": "off",
+    "react/jsx-boolean-value": "off",
     "no-continue": "off",
     "react/jsx-one-expression-per-line": "off",
     "arrow-body-style": "off",

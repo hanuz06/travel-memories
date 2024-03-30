@@ -4,7 +4,7 @@ import Card from "../../shared/components/UIElements/Card";
 import LocationItem from "./LocationItem";
 import Button from "../../shared/components/FormElements/Button";
 
-function LocationList({ items }) {
+function LocationList({ items, onDeleteLocation }) {
   if (!items?.length) {
     return (
       <div className="place-list center">
@@ -15,18 +15,20 @@ function LocationList({ items }) {
       </div>
     );
   }
+
   return (
     <ul className="place-list">
       {items.map((location) => (
         <LocationItem
           key={location.id}
           id={location.id}
-          image={location.imageUrl}
+          image={location.image}
           title={location.title}
           description={location.description}
           address={location.address}
           creatorId={location.creator}
           coordinates={location.coordinates}
+          onDelete={onDeleteLocation}
         />
       ))}
     </ul>

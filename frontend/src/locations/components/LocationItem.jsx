@@ -1,4 +1,5 @@
 import { useState, useContext } from "react";
+import { useHistory } from "react-router-dom";
 
 import Button from "../../shared/components/FormElements/Button";
 import Card from "../../shared/components/UIElements/Card";
@@ -7,9 +8,14 @@ import Modal from "../../shared/components/UIElements/Modal";
 import { AuthContext } from "../../shared/context/auth-context";
 import "./LocationItem.css";
 import Map from "../../shared/components/UIElements/Map";
+import { useHttpClient } from "../../shared/hooks/http-hook";
+import ErrorModal from "../../shared/components/UIElements/ErrorModal";
+import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 
-function LocationItem({ id, image, title, address, description, creatorId, coordinates }) {
+function LocationItem({ id, image, title, address, description, creatorId, coordinates, onDelete }) {
   const auth = useContext(AuthContext);
+  const history = useHistory();
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
   const [showMap, setShowMap] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -30,13 +36,19 @@ function LocationItem({ id, image, title, address, description, creatorId, coord
     setShowConfirmModal(false);
   };
 
-  const confirmDeleteHandler = () => {
+  const confirmDeleteHandler = async () => {
     setShowConfirmModal(false);
-    console.log("Deleting...");
+    try {
+      await sendRequest(`http://localhost:5000/api/locations/${id}`, "DELETE");
+      onDelete(id);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
     <>
+      <ErrorModal error={error} onClear={clearError} />
       <Modal
         show={showMap}
         onCancel={closeMapHandler}
@@ -69,6 +81,7 @@ function LocationItem({ id, image, title, address, description, creatorId, coord
       </Modal>
       <li className="place-item">
         <Card className="place-item__content">
+          {isLoading && <LoadingSpinner asOverlay />}
           <div className="place-item__image">
             <img src={image} alt={title} />
           </div>
