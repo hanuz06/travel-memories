@@ -16,7 +16,7 @@ function UserItem({ image, name, locationCount, id }) {
           <div className="user-item__info">
             <h2>{name}</h2>
             <h3>
-              {locationCount}
+              {locationCount} &nbsp;
               {locationCount === 1 ? "Place" : "Places"}
             </h3>
           </div>

@@ -1,24 +1,38 @@
-import { faker } from "@faker-js/faker";
-import { v4 as uuidv4 } from "uuid";
+import { useEffect, useState } from "react";
 
 import UsersList from "../components/UsersList";
+import ErrorModal from "../../shared/components/UIElements/ErrorModal";
+import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
+import { useHttpClient } from "../../shared/hooks/http-hook";
 
 function Users() {
-  const USERS = [];
+  const [users, setUsers] = useState();
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
-  for (let index = 0; index < 2; index++) {
-    USERS.push({
-      id: `u${index + 1}`,
-      name: faker.person.fullName(),
-      image: faker.image.url({
-        width: 50,
-        height: 50,
-      }),
-      locations: faker.number.int({ min: 1, max: 5 }),
-    });
-  }
-  console.log(USERS);
-  return <UsersList users={USERS} />;
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const responseData = await sendRequest("http://localhost:5000/api/users");
+
+        setUsers(responseData.users);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchUsers();
+  }, [sendRequest]);
+
+  return (
+    <>
+      <ErrorModal error={error} onClear={clearError} />
+      {isLoading && (
+        <div className="center">
+          <LoadingSpinner asOverlay />
+        </div>
+      )}
+      {!isLoading && users && <UsersList users={users} />}
+    </>
+  );
 }
 
 export default Users;

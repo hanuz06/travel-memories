@@ -15,7 +15,13 @@ function UsersList({ users }) {
   return (
     <ul className="users-list">
       {users?.map((user) => (
-        <UserItem key={user.id} id={user.id} name={user.name} image={user.image} locationCount={user.locations} />
+        <UserItem
+          key={user.id}
+          id={user.id}
+          name={user.name}
+          image={user.image}
+          locationCount={user.locations.length}
+        />
       ))}
     </ul>
   );

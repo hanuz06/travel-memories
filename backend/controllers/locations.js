@@ -74,7 +74,7 @@ const createLocation = async (req, res, next) => {
   });
 
   let user;
-
+console.log('ddfdsfsdfdsfdsf= ', creator)
   try {
     user = await User.findById(creator);
   } catch (err) {

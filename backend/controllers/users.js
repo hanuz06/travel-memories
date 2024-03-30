@@ -43,13 +43,12 @@ const signup = async (req, res, next) => {
   });
 
   try {
-    let res = await createdUser.save();
+    await createdUser.save();
   } catch (err) {
     return next(new HttpError("Failed to sign up!", 500));
   }
 
-  console.log("222222222222222222222= ", createdUser);
-  // res.status(201).json({ user: createdUser.toObject({ getters: true }) });
+  res.status(201).json({ user: createdUser.toObject({ getters: true }) });
 };
 
 const login = async (req, res, next) => {
@@ -66,7 +65,12 @@ const login = async (req, res, next) => {
     return next(new HttpError("Please check your credendials", 400));
   }
 
-  res.status(200).json({ message: "Logged in" });
+  res
+    .status(200)
+    .json({
+      message: "Logged in",
+      user: existingUser.toObject({ getters: true }),
+    });
 };
 
 module.exports = {
