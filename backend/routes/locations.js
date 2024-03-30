@@ -7,6 +7,7 @@ const {
   deleteLocation,
 } = require("../controllers/locations");
 const { check } = require("express-validator");
+const fileUpload = require("../middleware/file-upload");
 
 const router = express.Router();
 
@@ -16,6 +17,7 @@ router.get("/user/:uid", getLocationsByUserId);
 
 router.post(
   "/",
+  fileUpload.single("image"),
   [
     check("title").not().isEmpty(),
     check("description").isLength({ min: 5 }),

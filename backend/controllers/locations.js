@@ -1,5 +1,6 @@
 const { validationResult } = require("express-validator");
 const mongoose = require("mongoose");
+const fs = require("fs");
 
 const HttpError = require("../models/http-error");
 const Location = require("../models/location");
@@ -33,7 +34,8 @@ const getLocationsByUserId = async (req, res, next) => {
   }
 
   if (!userWithLocations || !userWithLocations?.locations?.length) {
-    return next(new HttpError("Could not find locations for the user id", 404));
+    // return next(new HttpError("Could not find locations for the user id", 404));
+    userWithLocations.locations = [];
   }
 
   res.json({
@@ -53,8 +55,6 @@ const createLocation = async (req, res, next) => {
 
   const { title, description, address, creator } = req.body;
 
-  let coordinates;
-
   try {
   } catch (error) {
     return next(error);
@@ -68,13 +68,11 @@ const createLocation = async (req, res, next) => {
       lat: 40.74857864692124,
       lng: -73.9852674364135,
     },
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Empire_State_Building_%28aerial_view%29.jpg/375px-Empire_State_Building_%28aerial_view%29.jpg",
+    image: req.file.path,
     creator,
   });
 
   let user;
-console.log('ddfdsfsdfdsfdsf= ', creator)
   try {
     user = await User.findById(creator);
   } catch (err) {
@@ -134,7 +132,7 @@ const updateLocation = async (req, res, next) => {
   });
 };
 
-const deleteLocation = async (req, res, next) => { 
+const deleteLocation = async (req, res, next) => {
   const locationId = req.params.pid;
 
   let location;
@@ -148,6 +146,8 @@ const deleteLocation = async (req, res, next) => {
     return next(new HttpError("Failed to find location by provided id.", 404));
   }
 
+  const imagePath = location.image;
+
   try {
     const currentSession = await mongoose.startSession();
     currentSession.startTransaction();
@@ -159,11 +159,15 @@ const deleteLocation = async (req, res, next) => {
     return next(new HttpError("Failed to delete location", 500));
   }
 
+  fs.unlink(imagePath, (err) => {
+    console.log(err);
+  });
+
   res.status(200).json({
     message: "Location deleted.",
   });
 };
- 
+
 module.exports = {
   getLocationById,
   getLocationsByUserId,

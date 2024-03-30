@@ -1,3 +1,4 @@
+const fs = require("fs");
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
@@ -6,10 +7,13 @@ require("dotenv").config();
 const locationsRoutes = require("./routes/locations");
 const usersRoutes = require("./routes/users");
 const HttpError = require("./models/http-error");
+const path = require("path");
 
 const app = express();
 
 app.use(bodyParser.json());
+
+app.use("/uploads/images", express.static(path.join("uploads", "images")));
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -29,6 +33,12 @@ app.use(() => {
 });
 
 app.use((error, req, res, next) => {
+  if (req.file) {
+    fs.unlink(req.file.path, (err) => {
+      console.error("unlinking file", err);
+    });
+  }
+
   if (res.headerSent) {
     return next(error);
   }

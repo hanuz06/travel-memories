@@ -16,7 +16,7 @@ function NavLinks() {
       </li>
       {auth.isLoggedIn && (
         <li>
-          <NavLink to="/u1/locations">MY LOCATIONS</NavLink>
+          <NavLink to={`/${auth.userId}/locations`}>MY LOCATIONS</NavLink>
         </li>
       )}
       {auth.isLoggedIn && (

@@ -16,9 +16,8 @@ const getUsers = async (req, res, next) => {
 
 const signup = async (req, res, next) => {
   const errors = validationResult(req);
-
   if (!errors.isEmpty()) {
-    return next(new HttpError("Invalid inputs", 422));
+    return next(new HttpError("Invalid inputs during signup", 422));
   }
 
   const { name, email, password } = req.body;
@@ -37,8 +36,7 @@ const signup = async (req, res, next) => {
     name,
     email,
     password,
-    image:
-      "https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg?w=740&t=st=1711116413~exp=1711117013~hmac=46f520ac29234134d3c13c500a41b8e4de5a617939a4994ee811996bdf7220a9",
+    image: req.file.path,
     locations: [],
   });
 
@@ -65,12 +63,10 @@ const login = async (req, res, next) => {
     return next(new HttpError("Please check your credendials", 400));
   }
 
-  res
-    .status(200)
-    .json({
-      message: "Logged in",
-      user: existingUser.toObject({ getters: true }),
-    });
+  res.status(200).json({
+    message: "Logged in",
+    user: existingUser.toObject({ getters: true }),
+  });
 };
 
 module.exports = {

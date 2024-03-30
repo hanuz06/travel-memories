@@ -83,7 +83,7 @@ function LocationItem({ id, image, title, address, description, creatorId, coord
         <Card className="place-item__content">
           {isLoading && <LoadingSpinner asOverlay />}
           <div className="place-item__image">
-            <img src={image} alt={title} />
+            <img src={`http://localhost:5000/${image}`} alt={title} />
           </div>
           <div className="place-item__info">
             <h2>{title}</h2>
@@ -94,7 +94,7 @@ function LocationItem({ id, image, title, address, description, creatorId, coord
             <Button inverse onClick={openMapHandler}>
               VIEW ON MAP
             </Button>
-            {auth.isLoggedIn && (
+            {auth.userId === creatorId && (
               <>
                 <Button to={`/locations/${id}`}>EDIT</Button>
                 <Button danger onClick={showDeleteWarningHandler}>
