@@ -39,7 +39,7 @@ function LocationItem({ id, image, title, address, description, creatorId, coord
   const confirmDeleteHandler = async () => {
     setShowConfirmModal(false);
     try {
-      await sendRequest(`http://localhost:5000/api/locations/${id}`, "DELETE", null, {
+      await sendRequest(`${import.meta.env.VITE_APP_BACKEND}/locations/${id}`, "DELETE", null, {
         Authorization: `Bearer ${auth.sessionToken}`,
       });
       onDelete(id);
@@ -60,7 +60,8 @@ function LocationItem({ id, image, title, address, description, creatorId, coord
         footer={<Button onClick={closeMapHandler}>CLOSE</Button>}
       >
         <div className="map-container">
-          <Map center={coordinates} zoom={16} />
+          {/* <Map center={coordinates} zoom={16} /> */}
+          <img style={{ width: "inherit" }} src="/images/newyork.png" alt="new york" />
         </div>
       </Modal>
       <Modal
@@ -85,7 +86,7 @@ function LocationItem({ id, image, title, address, description, creatorId, coord
         <Card className="place-item__content">
           {isLoading && <LoadingSpinner asOverlay />}
           <div className="place-item__image">
-            <img src={`http://localhost:5000/${image}`} alt={title} />
+            <img src={`${import.meta.env.VITE_APP_ASSET}/${image}`} alt={title} />
           </div>
           <div className="place-item__info">
             <h2>{title}</h2>

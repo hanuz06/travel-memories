@@ -37,7 +37,7 @@ const UpdateLocation = () => {
   useEffect(() => {
     const fetchLocation = async () => {
       try {
-        const responseData = await sendRequest(`http://localhost:5000/api/locations/${locationId}`);
+        const responseData = await sendRequest(`${import.meta.env.VITE_APP_BACKEND}/locations/${locationId}`);
         setLoadedLocation(responseData.location);
         setFormData(
           {
@@ -62,7 +62,7 @@ const UpdateLocation = () => {
     e.preventDefault();
     try {
       await sendRequest(
-        `http://localhost:5000/api/locations/${locationId}`,
+        `${import.meta.env.VITE_APP_BACKEND}/locations/${locationId}`,
         "PATCH",
         JSON.stringify({
           title: formState.inputs.title.value,

@@ -66,7 +66,7 @@ const Auth = () => {
     if (isLoginMode) {
       try {
         const responseData = await sendRequest(
-          "http://localhost:5000/api/users/login",
+          `${import.meta.env.VITE_APP_BACKEND}/users/login`,
           "POST",
           JSON.stringify({
             email: formState.inputs.email.value,
@@ -89,7 +89,7 @@ const Auth = () => {
         formData.append("password", formState.inputs.password.value);
         formData.append("image", formState.inputs.image.value);
 
-        const responseData = await sendRequest("http://localhost:5000/api/users/signup", "POST", formData);
+        const responseData = await sendRequest(`${import.meta.env.VITE_APP_BACKEND}/users/signup`, "POST", formData);
         auth.login(responseData.userId, responseData.token);
       } catch (err) {
         console.error(err);

@@ -1,6 +1,5 @@
 import "./App.css";
 import { BrowserRouter as Router, Route, Redirect, Switch } from "react-router-dom";
-import { useState, useCallback, useEffect } from "react";
 
 import { AuthContext } from "./shared/context/auth-context";
 

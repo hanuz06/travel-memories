@@ -79,7 +79,7 @@ function NewLocation() {
       formData.append("description", formState.inputs.description.value);
       formData.append("address", formState.inputs.address.value);
       formData.append("image", formState.inputs.image.value);
-      await sendRequest("http://localhost:5000/api/locations", "POST", formData, {
+      await sendRequest(`${import.meta.env.VITE_APP_BACKEND}/locations`, "POST", formData, {
         Authorization: `Bearer ${auth.sessionToken}`,
       });
       history.push("/");

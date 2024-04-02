@@ -15,7 +15,7 @@ function UserLocations() {
   useEffect(() => {
     const fetchLocations = async () => {
       try {
-        const responseDate = await sendRequest(`http://localhost:5000/api/locations/user/${userId}`);
+        const responseDate = await sendRequest(`${import.meta.env.VITE_APP_BACKEND}/locations/user/${userId}`);
         setLoadedLocations(responseDate.locations);
       } catch (err) {}
     };
