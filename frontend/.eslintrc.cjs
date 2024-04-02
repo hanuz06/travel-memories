@@ -18,6 +18,7 @@ module.exports = {
     "react/jsx-no-constructed-context-values": "off",
     "react/button-has-type": "off",
     "no-empty": "warn",
+    "no-shadow": "off",
     "consistent-return": "off",
     "no-unneeded-ternary": "off",
     "import/prefer-default-export": "off",

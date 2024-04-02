@@ -79,8 +79,9 @@ function NewLocation() {
       formData.append("description", formState.inputs.description.value);
       formData.append("address", formState.inputs.address.value);
       formData.append("image", formState.inputs.image.value);
-      formData.append("creator", auth.userId);
-      await sendRequest("http://localhost:5000/api/locations", "POST", formData);
+      await sendRequest("http://localhost:5000/api/locations", "POST", formData, {
+        Authorization: `Bearer ${auth.sessionToken}`,
+      });
       history.push("/");
     } catch (err) {}
   };

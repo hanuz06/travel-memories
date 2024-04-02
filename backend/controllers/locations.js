@@ -53,7 +53,7 @@ const createLocation = async (req, res, next) => {
     next(new HttpError("Invalid inputs", 422));
   }
 
-  const { title, description, address, creator } = req.body;
+  const { title, description, address } = req.body;
 
   try {
   } catch (error) {
@@ -69,12 +69,12 @@ const createLocation = async (req, res, next) => {
       lng: -73.9852674364135,
     },
     image: req.file.path,
-    creator,
+    creator: req?.userData?.userId,
   });
 
   let user;
   try {
-    user = await User.findById(creator);
+    user = await User.findById(req?.userData?.userId);
   } catch (err) {
     return next(new HttpError("Failed to find user: " + err.message, 404));
   }
@@ -118,6 +118,10 @@ const updateLocation = async (req, res, next) => {
     return next(new HttpError("Failed to find location", 500));
   }
 
+  if (location.creator.toString() !== req.userData.userId) {
+    return next(new HttpError("You're not allowed to edit this location", 401));
+  }
+
   location.title = title;
   location.description = description;
 
@@ -144,6 +148,12 @@ const deleteLocation = async (req, res, next) => {
 
   if (!location) {
     return next(new HttpError("Failed to find location by provided id.", 404));
+  }
+
+  if (location.creator.id !== req.userData.userId) {
+    return next(
+      new HttpError("You're not allowed to delete this location", 401)
+    );
   }
 
   const imagePath = location.image;

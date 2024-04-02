@@ -70,6 +70,7 @@ const UpdateLocation = () => {
         }),
         {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${auth.sessionToken}`,
         },
       );
       history.push(`/${auth.userId}/locations`);

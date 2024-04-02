@@ -77,7 +77,7 @@ const Auth = () => {
           },
         );
 
-        auth.login(responseData.user.id);
+        auth.login(responseData.userId, responseData.token);
       } catch (err) {
         console.error(err);
       }
@@ -90,7 +90,7 @@ const Auth = () => {
         formData.append("image", formState.inputs.image.value);
 
         const responseData = await sendRequest("http://localhost:5000/api/users/signup", "POST", formData);
-        auth.login(responseData.user.id);
+        auth.login(responseData.userId, responseData.token);
       } catch (err) {
         console.error(err);
       }

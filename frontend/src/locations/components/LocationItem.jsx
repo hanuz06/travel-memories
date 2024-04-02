@@ -39,7 +39,9 @@ function LocationItem({ id, image, title, address, description, creatorId, coord
   const confirmDeleteHandler = async () => {
     setShowConfirmModal(false);
     try {
-      await sendRequest(`http://localhost:5000/api/locations/${id}`, "DELETE");
+      await sendRequest(`http://localhost:5000/api/locations/${id}`, "DELETE", null, {
+        Authorization: `Bearer ${auth.sessionToken}`,
+      });
       onDelete(id);
     } catch (err) {
       console.error(err);
