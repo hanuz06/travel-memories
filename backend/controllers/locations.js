@@ -34,8 +34,7 @@ const getLocationsByUserId = async (req, res, next) => {
   }
 
   if (!userWithLocations || !userWithLocations?.locations?.length) {
-    // return next(new HttpError("Could not find locations for the user id", 404));
-    userWithLocations.locations = [];
+    userWithLocations = { locations: [] };
   }
 
   res.json({

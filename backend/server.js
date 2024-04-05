@@ -46,12 +46,17 @@ app.use((error, req, res, next) => {
   res.status(error.code || 500);
   res.json({ message: error.message || "An unknow error!" });
 });
-
+console.log("process.env.MONGO_URL= ", process.env.MONGO_URL);
 mongoose
-  .connect(
-    `mongodb+srv://${process.env.MONGO_USER_ID}:${process.env.MONGO_USER_PASSWORD}@cluster0.dakk8.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority&appName=Cluster0`
-  )
-  .then(() => app.listen(5000))
+  .connect(process.env.MONGO_URL)
+  .then(() => {
+    console.log("Connected to MongoDB");
+  })
   .catch((e) => {
     console.log(e);
   });
+
+const PORT = process.env.NODE_DOCKER_PORT || 5000;
+app.listen(PORT, () => {
+  console.log("Server is running on port " + PORT);
+});

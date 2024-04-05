@@ -18,6 +18,7 @@ const getUsers = async (req, res, next) => {
 
 const signup = async (req, res, next) => {
   const errors = validationResult(req);
+
   if (!errors.isEmpty()) {
     return next(new HttpError("Invalid inputs during signup", 422));
   }
@@ -52,7 +53,7 @@ const signup = async (req, res, next) => {
   try {
     await createdUser.save();
   } catch (err) {
-    return next(new HttpError("Failed to sign up!", 500));
+    return next(new HttpError("Failed to save user!", 500));
   }
 
   let token;
@@ -68,6 +69,7 @@ const signup = async (req, res, next) => {
       }
     );
   } catch (err) {
+    console.log(err);
     return next(new HttpError("Failed to sign up!", 500));
   }
 
